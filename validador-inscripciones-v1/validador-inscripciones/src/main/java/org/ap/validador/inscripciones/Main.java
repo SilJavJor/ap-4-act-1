@@ -1,38 +1,51 @@
 package org.ap.validador.inscripciones;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
     public static void main(String[] args) {
-        // Crear instancias de Alumnos
-        Alumno alumnoJuan = new Alumno("Juan");
-        Alumno alumnoMaria = new Alumno("María");
+        double calificacionMinimaParaAprobacion = 75.00;
 
-        // Crear instancias de Materia y definir correlativas
-        Materia algoritmos = new Materia("Algoritmos", new ArrayList<>());
-        Materia paradigmas = new Materia("Paradigmas de Programación", List.of(algoritmos));
-        Materia diseñoDeSistemas = new Materia("Diseño de Sistemas", List.of(paradigmas));
+        // Alumnos
+        Alumno juan = new Alumno("Juan");
+        Alumno maria = new Alumno("Maria");
 
-        // Crear instancias de Inscripcion
-        Inscripcion inscripcionJuan = new Inscripcion(alumnoJuan, algoritmos);
-        Inscripcion inscripcionMaria = new Inscripcion(alumnoMaria, paradigmas);
+        // Materias
+        Materia algoritmos = new Materia("Algoritmos");
+        Materia paradigmas = new Materia("Paradigmas");
+        Materia diseñoSistemas = new Materia("Diseño");
 
-        // Operaciones
-        List<Materia> materiasAprobadasAlumnoJuan = new ArrayList<>();
-        materiasAprobadasAlumnoJuan.add(algoritmos);
-        materiasAprobadasAlumnoJuan.add(diseñoDeSistemas);
+        // Agregar materia por alumno
+        juan.inscribir(algoritmos, calificacionMinimaParaAprobacion);
+        juan.inscribir(paradigmas, calificacionMinimaParaAprobacion);
+        juan.inscribir(diseñoSistemas, calificacionMinimaParaAprobacion);
+        // Asignar valores a las materias
+        juan.asignarCalificacion(algoritmos, 75.0);
+        juan.asignarCalificacion(paradigmas, 80.0);
+        juan.asignarCalificacion(diseñoSistemas, 90.0);
 
-        List<Materia> materiasAprobadasAlumnoMaria = new ArrayList<>();
-        materiasAprobadasAlumnoMaria.add(algoritmos);
-        materiasAprobadasAlumnoMaria.add(paradigmas);
+        maria.inscribir(algoritmos, calificacionMinimaParaAprobacion);
+        maria.inscribir(paradigmas,calificacionMinimaParaAprobacion);
+        maria.asignarCalificacion(algoritmos, 70.0);
+        maria.asignarCalificacion(paradigmas, 75.0);
 
-        // Verificar si las materias están aprobadas
-        System.out.println("Alumno Juan puede cursar Diseño de Sistemas: " + inscripcionJuan.aprobada(materiasAprobadasAlumnoJuan));
-        System.out.println("Alumno Maria puede cursar Diseño de Sistemas: " + inscripcionMaria.aprobada(materiasAprobadasAlumnoMaria));
+        // Mostrar materias inscritas y verificar si están aprobadas
+        juan.mostrarMateriasInscriptas();
+        verificarEstadoAprobacion(juan);
 
-        System.out.println("Alumno Juan puede cursar Algoritmos: " + inscripcionJuan.aprobada(materiasAprobadasAlumnoJuan));
-        System.out.println("Alumno Juan puede cursar Paradigmas: " + inscripcionJuan.aprobada(materiasAprobadasAlumnoJuan));
-        System.out.println("Alumno Juan puede cursar Lenguaje C: " + inscripcionJuan.aprobada(materiasAprobadasAlumnoJuan));
+        maria.mostrarMateriasInscriptas();
+        verificarEstadoAprobacion(maria);
+    }
+
+    private static void verificarEstadoAprobacion(Alumno alumno) {
+        String aprobadaDesaprobada;
+
+        for (Inscripcion inscripcion : alumno.getInscripciones()) {
+            if (inscripcion.aprobada()) {
+                aprobadaDesaprobada = "Aprobada";
+            } else {
+                aprobadaDesaprobada = "Desaprobada";
+            }
+
+            System.out.println("- " + inscripcion.getMateria().getNombre() + ": " + aprobadaDesaprobada);
+        }
     }
 }
